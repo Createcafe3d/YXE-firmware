@@ -9,10 +9,9 @@
 #include "reprog.h"
 #include "hwaccess.h"
 #include "clock.h"
-#include "keycard.h"
-#include "ADClockout.h"
 #include "led_override.h"
 #include "overrides.h"
+#include "interlock.h"
 
 #include <usb_core.h>
 #include <usb_cdc.h>
@@ -20,8 +19,6 @@
 
 extern volatile uint32_t g_dripcount;
 extern volatile uint32_t g_dripghosts;
-extern uint32_t g_key_beeps;
-extern uint32_t g_key_beep_counter;
 
 volatile uint32_t tick = 0;
 bool g_debug=0;
@@ -39,18 +36,7 @@ void delay_ms(int ms) {
 }
 
 void coilBuzzer(void){
-  if((g_key_coil_gate==1) & (g_key_beeps>0)){
-
-    if ((g_key_beeps&0x1)==1){ //beep on odd counts
-      buzzCoilStep();
-    }
-    g_key_beep_counter=g_key_beep_counter-1;
-    if (g_key_beep_counter==0){
-      g_key_beeps=g_key_beeps-1;
-      g_key_beep_counter=KEY_TONE_LENGTH;
-    }
-  }
-  else if(g_twig_coils){
+  if(g_twig_coils){
     twigCoils();
   }
 }
@@ -65,11 +51,10 @@ void SysTick_Handler(void) {
   tick += 1;
   kick_watchdog();
   update_pwm();
-  update_key_state();
-  check_adcLockout();
-	coilBuzzer();
-	toggle_dripper();
+  coilBuzzer();
+  toggle_dripper();
 }
+
 void init_watchdog(){
   RCC->CSR |= 0x1; //bit 0 of RCC_SCR is LSI clock enable (watchdog only
   while((RCC->CSR & 0x2)==0){ //bit 1 of RCC_CSR is LSIRDY (1 when LSI is running)
@@ -87,6 +72,7 @@ void init_watchdog(){
   // RLR = 100ms*(40KHz/8)
   IWDG->RLR = 500;
 }
+
 void kick_watchdog(){
   IWDG->KR=0xAAAA; //AAAAH (restart the watchdog timer)
 }
@@ -106,6 +92,7 @@ void init_serial_number() {
 
 int main(void)
 {
+    laser_off(); 
 	bootloaderSwitcher();
 
   init_serial_number();
@@ -118,6 +105,7 @@ int main(void)
 	setupJP6();
 	setupLeds();
   init_watchdog();
+  setup_interlock();
 
 	//debug: flas the light on boot, to watch for watchdog resets
 	setCoilLed(1);
@@ -127,7 +115,6 @@ int main(void)
 		play_long_spin(); //Spin the led's while we load the rest of this stuff
 	}
 
-  setup_keycard();
   initialize_pwm();
   initialize_dripper();
 
