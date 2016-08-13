@@ -6,7 +6,6 @@ This has been tried on rasbian, ubuntu 14.04, 16.04
 ```shell
 sudo add-apt-repository ppa:terry.guo/gcc-arm-embedded
 sudo apt-get remove binutils-arm-none-eabi gcc-arm-none-eabi
-
 ```
 __It will probably just say 0 removed if you didn't have it installed.__
 
@@ -30,12 +29,21 @@ make
 This should result in a main.bin in the local directory
 
 ## Get the source for dfu-util (firmware flashing tool)
+Not needed, you can use the static ones we've given "./standalone_dfu/"
 ```shell
 git clone git://git.code.sf.net/p/dfu-util/dfu-util
 cd dfu-util
 ./autogen.sh
 ./configure
 sudo make install
+```
+Now you can flash firmware with the following command:
+```shell
+Linux:
+dfu-util -a 0 --dfuse-address 0x08000000 -D main.bin -d 16d0:0af3
+
+Windows:
+run standalone_dfu/windows/wind_dfu.bat with main.bin in the same directory
 ```
 ## Get openocd (linux - Only needed for use with debug board)
 ```shell
