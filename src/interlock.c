@@ -35,7 +35,7 @@ uint8_t get_interlock_state(void){
 	
     switch_a = GPIO_ReadInputDataBit(GPIOF, GPIO_Pin_0);
     switch_b = GPIO_ReadInputDataBit(GPIOF, GPIO_Pin_1);
-	switches = switch_a << 1 + switch_b;
+	switches = (switch_a << 1) + switch_b;
 	switch(switches){
 	case 0b00:
 		 play_blink_four();
