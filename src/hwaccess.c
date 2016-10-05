@@ -250,9 +250,8 @@ void setCoilLed(uint8_t instate){
 }
 
 void setInLed(uint8_t instate){
-  if (g_led_control) {
+  if (g_led_control)
     GPIO_WriteBit(GPIOB, GPIO_Pin_13, instate); //Inside corner
-  }
 }	
 
 void setUSBLed(uint8_t instate){
