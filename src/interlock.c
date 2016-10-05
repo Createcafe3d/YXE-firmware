@@ -31,10 +31,28 @@ void setup_interlock(void){
 uint8_t get_interlock_state(void){
     uint8_t switch_a=0;
     uint8_t switch_b=1;
-
+	uint8_t switches;
+	
     switch_a = GPIO_ReadInputDataBit(GPIOF, GPIO_Pin_0);
     switch_b = GPIO_ReadInputDataBit(GPIOF, GPIO_Pin_1);
+	switches = switch_a << 1 + switch_b;
+	switch(switches){
+	case 0b00:
+		 play_blink_four();
+		 break; 
+	case 0b01:
+		 play_blink_right();
+		 break; 
+	case 0b10: 
+		 play_blink_left();
+		 break; 
+	case 0b11:
+		break;
+	}
+
+
     return (switch_a & switch_b);
+
 }
 
 void send_printer_status() {

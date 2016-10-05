@@ -15,7 +15,6 @@
 
 extern volatile uint8_t g_led_control;
 
-uint8_t g_led_current_pattern=0;
 
 //Led Locations:
 //[8,4]
@@ -26,30 +25,34 @@ uint8_t l_four_spin[17]={1,2,4,8,1,2,4,8,1,2,4,8,1,2,4,8,0};
 uint8_t l_long_spin[53]={0,1,2,4,8,1,2,4,8,1,2,4,8,0,1,2,4,8,1,2,4,8,1,2,4,8,0,1,2,4,8,1,2,4,8,1,2,4,8,0,1,2,4,8,1,2,4,8,1,2,4,8,0};
 uint8_t l_left_right[4]={9,6,9,6};
 uint8_t l_blink_four[34]={0,0,15,15,0,0,15,15,0,0,15,15,0,0,15,15,0,0,15,15,0,0,15,15,0,0,15,15,0,0,15,15,0,0};
+uint8_t l_blink_left[34]={0,0,9,9,0,0,9,9,0,0,9,9,0,0,9,9,0,0,9,9,0,0,9,9,0,0,9,9,0,0,9,9,0,0};
+uint8_t l_blink_right[34]={0,0,9,9,0,0,9,9,0,0,9,9,0,0,9,9,0,0,9,9,0,0,9,9,0,0,9,9,0,0,9,9,0,0};
 uint8_t* led_steps;
 
+uint8_t g_led_current_pattern=0;
 uint8_t g_pattern_pos=0;
 
 void play_long_spin(){
   start_led_steps(l_long_spin,53);
-	g_led_current_pattern=L_LONG_SPIN;
 }
 
-void stop_led_steps(uint8_t pattern){
-	if (g_led_current_pattern==pattern){
-		g_pattern_pos=0;
-		turn_leds_on(0);
-	}
+void play_blink_left(){
+	start_led_steps(l_blink_left, 34);
+}
+
+void play_blink_right(){
+	start_led_steps(l_blink_right, 34);
 }
 
 void play_blink_four(){
 	start_led_steps(l_blink_four,34);
-	g_led_current_pattern=L_BLINK_FOUR;
 }
 
 void start_led_steps(uint8_t new_steps[], uint8_t num_steps){
-  led_steps=new_steps;
-  g_pattern_pos=num_steps;
+	if(g_pattern_pos == 0){
+	  led_steps=new_steps;
+	  g_pattern_pos=num_steps;
+	}
 }
 
 void next_led_step(){
