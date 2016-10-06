@@ -5,8 +5,7 @@
 #include "hwaccess.h"
 #include "clock.h"
 #include "pwmout.h"
-#include "ADClockout.h"
-#include "keycard.h"
+#include "interlock.h"
 #include "overrides.h"
 
 volatile uint16_t g_adcVals[ADC_CHANS]; //ADC_CHANS defined in headder
@@ -251,9 +250,8 @@ void setCoilLed(uint8_t instate){
 }
 
 void setInLed(uint8_t instate){
-  if (g_led_control) {
+  if (g_led_control)
     GPIO_WriteBit(GPIOB, GPIO_Pin_13, instate); //Inside corner
-  }
 }	
 
 void setUSBLed(uint8_t instate){
@@ -263,13 +261,9 @@ void setUSBLed(uint8_t instate){
 
 void laser_on(void) {
   bool laser_gating=1;
-  if (ADC_KEY_EN){
-    if (g_adc_state!=ADC_LOCKOUT_VALID)
-      laser_gating=0;
-  }
+
   if (INTERLOCK_KEY_EN){
-    if (g_key_state!=KEY_VALID)
-      laser_gating=0;
+    laser_gating=get_interlock_state();
   }
   GPIO_WriteBit(GPIOB, GPIO_Pin_5, laser_gating);
   g_laser_gating = laser_gating;

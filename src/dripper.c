@@ -5,7 +5,6 @@
 #include "serialio.h"
 #include "reprog.h"
 #include "hwaccess.h"
-#include "keycard.h"
 
 #include <usb_cdc.h>
 #include "pb_encode.h"
@@ -22,7 +21,6 @@ uint16_t g_drip_state=DRIPPER_IDLE;
 
 void EXTI0_1_IRQHandler(void) {
   static int led_toggle_state=0;
-
 
   //Dripper
   if (EXTI_GetITStatus(EXTI_Line1) != RESET) { //if it's the dripper that called this
@@ -82,11 +80,6 @@ void EXTI0_1_IRQHandler(void) {
       }
     } //DRIPPER_CHECKING
     EXTI_ClearITPendingBit(EXTI_Line1);
-  }
-  //Key Clock
-  else if (EXTI_GetITStatus(EXTI_Line0) != RESET){
-    read_key(); //Read the key bits
-    EXTI_ClearITPendingBit(EXTI_Line0);
   }
 }
 

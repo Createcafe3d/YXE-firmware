@@ -21,5 +21,6 @@ void stop_led_steps(uint8_t);
 void next_led_step(void);
 void play_long_spin();
 void play_blink_four();
-
+void play_blink_left();
+void play_blink_right();
 #endif /* INC_LED_OVERRIDE_H_ */

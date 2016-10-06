@@ -62,7 +62,8 @@ void serialio_feed() {
   int count;
   uint8_t read_buffer[64];
   if((count = CDC_ReadBytes(read_buffer)) != 0) {
-    GPIO_WriteBit(GPIOB, GPIO_Pin_12, 1); //Enable USB LED
+    //GPIO_WriteBit(GPIOB, GPIO_Pin_12, 1); //Enable USB LED
+	setUSBLed(1);
     serial_done(read_buffer, count); 
   }
 }

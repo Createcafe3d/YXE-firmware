@@ -1,5 +1,4 @@
 #!/bin/bash
-cd /home/peachyprinter/git/peachy-pro-firmware
 
 OVERRIDE_FILE="inc/overrides.h"
 
@@ -22,14 +21,13 @@ while true; do
 	echo 'Current git state:' $MODE
 	echo ---------------------------
 	echo 'q) Quit (CTRL+c at any time)'
-	echo '1) program peachy'
+	echo '1) program YXE3D'
 	echo '2) recompile current files'
 	echo '3) compile master branch'
 	echo '4) compile not_safe branch'
 	echo '5) git pull'
 	echo '6) reset local git files'
-	echo '7) merge master into not_safe'
-	read -p "Give option (q|1|2|3|4|5|6|7):" input
+	read -p "Give option (q|1|2|3|4|5|6):" input
 	
 	if [ $input == 1 ]; then
 		dfu-util -a 0 --dfuse-address 0x08000000 -D main.bin -d 16d0:0af3
