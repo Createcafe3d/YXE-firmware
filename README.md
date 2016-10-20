@@ -4,7 +4,7 @@
 This has been tried on rasbian, ubuntu 14.04, 16.04
 * Note: This will remove the any stale version of the compiler you may have
 ```shell
-sudo add-apt-repository ppa:terry.guo/gcc-arm-embedded
+sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa
 sudo apt-get remove binutils-arm-none-eabi gcc-arm-none-eabi
 ```
 __It will probably just say 0 removed if you didn't have it installed.__
