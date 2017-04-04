@@ -12,7 +12,7 @@ __It will probably just say 0 removed if you didn't have it installed.__
 Now install the compiler :)
 ```shell
 sudo apt-get update
-sudo apt-get install gcc-arm-none-eabi
+sudo apt-get install gcc-arm-none-eabi python-protobuf
 ```
 "UNDO" commands for the above (Don't run this unless something broke for you)
 ```shell
